@@ -2,15 +2,33 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
+var passport = require('passport');
 
 var User = require('./models/User');
 
 var validator = require('./utils/validator');
+var passportStrategy = require('./config/passport-strategy');
 
 var app = express();
 
 var jsonParser = bodyParser.json();
 
+
+/*****************
+ * APP INITIALIZERS
+ ****************/
+passport.use(passportStrategy);
+app.use(passport.initialize());
+
+
+/*************
+ * ROUTES
+ ************/
+app.get('/hidden', passport.authenticate('basic', { session: false }), function(req, res){
+  return res.json({
+    message: 'Luke, I am your father.'
+  });
+});
 
 app.get('/users', function(req, res){
   User.find({}, function(err, users){
