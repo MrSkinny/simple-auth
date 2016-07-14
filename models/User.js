@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var validator = require('../utils/validator');
 
 var UserSchema = new mongoose.Schema({
   username: {
@@ -16,3 +17,4 @@ var UserSchema = new mongoose.Schema({
 var User = mongoose.model('User', UserSchema);
 
 module.exports = User;
+
