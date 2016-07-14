@@ -49,6 +49,7 @@ app.post('/users', jsonParser, function(req, res){
 
 });
 
+
 mongoose.connect('mongodb://localhost/simple-node')
   .then(function(){
     app.listen(8000, function(){

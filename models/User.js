@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var validator = require('../utils/validator');
+var bcrypt = require('bcrypt');
 
 var UserSchema = new mongoose.Schema({
   username: {
@@ -13,6 +14,14 @@ var UserSchema = new mongoose.Schema({
     required: true
   }
 })
+
+UserSchema.methods.validatePassword = function(password, callback) {
+  bcrypt.compare(password, this.password, function(err, isValid){
+    if (err) return callback(err);
+
+    callback(null, isValid);
+  });
+};
 
 var User = mongoose.model('User', UserSchema);
 
