@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "mongoose": "registry:dt/mongoose#4.5.4+20160713062330"
+  }
+}
