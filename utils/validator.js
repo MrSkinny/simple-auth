@@ -1,3 +1,4 @@
+
 /**
  * return validated response (Obj)
  * {
@@ -71,6 +72,10 @@ module.exports = function validator(model, req){
           json: { message: 'Incorrect field length: password' }
         };
       }
+      // ********************
+      // end user validators
+      // =====================
+
 
       return { 
         error: false,
@@ -81,5 +86,4 @@ module.exports = function validator(model, req){
     default:
       return { status: null, json: {} };
   }
-
 }

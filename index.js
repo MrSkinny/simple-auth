@@ -1,6 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
 
 var User = require('./models/User');
 
@@ -23,16 +24,25 @@ app.post('/users', jsonParser, function(req, res){
   var validatorResponse = validator('User', req);
 
   if (!validatorResponse.error) {
-    var user = new User({
-      username: validatorResponse.username,
-      password: validatorResponse.password
+    bcrypt.genSalt(10, function(err, salt){
+      if (err) return res.status(500).json({message: 'Failed to salt'});
+
+      bcrypt.hash(validatorResponse.password, salt, function(err, hash){
+        if (err) return res.status(500).json({message: 'Failed to hash pw'});
+
+        var user = new User({
+          username: validatorResponse.username,
+          password: hash
+        });
+
+        user.save(function(err){
+          if (err) return res.status(500).json({ message: err.errmsg });
+
+          return res.status(201).json({ username: user.username })
+        });
+      });
     });
 
-    user.save(function(err){
-      if (err) return res.status(500).json({ message: err.errmsg });
-
-      return res.status(201).json({ username: user.username })
-    });
   } else {
     res.status(validatorResponse.status).json(validatorResponse.json);
   }
